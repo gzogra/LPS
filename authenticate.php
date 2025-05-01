@@ -1,6 +1,5 @@
 <?php
 session_start();
-include "db_config.php";
 
 if (empty($_POST['username']) || empty($_POST['password'])) {
     die('Please fill both the username and password field!');
@@ -16,6 +15,7 @@ $username = strip_tags($username);
 
 $password = $_POST['password'];
 
+# For testing purposes username and password are predefined
 $uname = "demo";
 $upass = "demo";
 
