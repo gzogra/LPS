@@ -132,6 +132,69 @@ This section introduces an automated evaluation process. Users select a judge LL
 
 **Note:** The judge model's `temperature` is set to `0` and `max_tokens` is set to unlimited to ensure consistent and comprehensive evaluations.
 
+
+## 🧠 LLM-Promptscope: Synthetic Dataset Creation Workflow
+
+An additional feature of **LLM-Promptscope** is the **Synthetic Dataset Creation Workflow**, which allows users to generate curated prompt-response pairs tailored to their preferences. This tool is especially useful for research, fine-tuning, or evaluation scenarios.
+
+---
+
+### ⚙️ User Configurable Parameters
+
+To initiate the workflow, the user must configure the following parameters:
+
+- **LLM for Prompt Generation**: Model used to create same-domain variant prompts.
+- **Number of Samples**: Total number of prompt-response pairs to be generated.
+- **Initial Prompt Sample**: A base prompt used to seed the generation process.
+- **Prompt Type**: Choose between:
+  - `QA Pair` – question and answer format.
+  - `Single Prompt` – standalone prompts without answers.
+
+#### Judge Configuration
+
+Additionally, the user must specify:
+
+- **Judge LLM**: Model used to evaluate the quality of generated answers.
+- **Judge Prompt**: Criteria or instruction set representing the user's preferences.
+- **Minimum Score Threshold**: The minimum alignment score required to accept a sample.
+
+---
+
+### 🔁 Workflow Description
+
+1. **Prompt Generation**:  
+   The selected LLM generates a new prompt based on the same domain as the user-provided initial sample.
+
+2. **Answer Generation**:  
+   The same LLM then generates an answer to the newly created prompt.
+
+3. **Judgment Phase**:  
+   The response is passed to a Judge LLM, along with the judge prompt that defines evaluation criteria.  
+   The judge returns an **alignment score** based on how well the answer meets the user's preferences.
+
+4. **Filtering and Saving**:  
+   If the score **meets or exceeds** the user-defined minimum threshold:
+   - The `(generated_prompt, generated_answer, judge_score)` tuple is stored.
+   - The sample is added to a growing **JSON file**.
+
+5. **Completion and Download**:  
+   After the specified number of samples is reached, the resulting dataset is presented to the user as a **downloadable JSON file**.
+
+---
+
+### 📄 Output Format
+
+Each accepted entry in the JSON file will be structured as:
+
+```json
+{
+  "prompt": "Generated prompt here",
+  "answer": "Answer to the prompt",
+  "score": 0.92
+}
+```
+
+This workflow helps build high-quality, preference-aligned synthetic datasets automatically, combining LLM creativity with judgment-based filtering.
 ---
 
 ## Submit and Results
