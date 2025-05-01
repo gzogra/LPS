@@ -193,8 +193,11 @@ Each accepted entry in the JSON file will be structured as:
   "judge_evaluation": "9"
 }
 ```
-
 This workflow helps build high-quality, preference-aligned synthetic datasets automatically, combining LLM creativity with judgment-based filtering.
+
+> **⚠️ Demo Limitation Notice:**  
+> For demonstration and proof-of-concept purposes, the **Synthetic Dataset Creation Workflow** is currently limited to using **gpt4o-mini** as the only available model for prompt and answer generation.
+
 ---
 
 ## Submit and Results
