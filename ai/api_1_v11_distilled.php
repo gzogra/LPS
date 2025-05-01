@@ -644,7 +644,117 @@ if (!isset($_SESSION['loggedin'])) {
     
     
     </form>
+    <form  id="sd_gen" action="generate_dataset.php" method="post">
+    <div class="container-fluid tabcontent" id="dataset">
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h2>Large Language Models - Dataset Generation</h2>
+                        <h4>Create Synthetic Dataset on User's Preferences</h4>
+                    </div>
+                    
+                    <div class="card-body">
+                            <div class="two-columns mt-3">
+                                <div class="column">
+                                    <fieldset style="border:2px solid lightblue; padding:15px;">
+                                        <legend>Model & Prompt Generation Params</legend>
+                                        
+                                        <label for="sd_llm_generator"><i class="arrow right"></i>&nbsp;&nbsp; Model Selection</label>
+                                            <select class="form-select" id='sd_llm_generator'>
+                                                <option value="gpt-4o-mini" selected>OpenAI GPT-4o Mini</option>
+                                                <option value="claude-3-5-sonnet-20241022">Anthropic Sonnet 3.5</option>
+                                                <option value="meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo">Meta Llama 3.2</option>
+                                                <option value="gemini-1.5-pro">Google Gemini 1.5 Pro</option>
+                                            </select>
+                                        <hr>
+                                        <label for="sd_samples_number"><i class="arrow right"></i>&nbsp;&nbsp; Number of Samples (0->1 example)</label>
+                                            <input id='sd_samples_number' type='number' min="1" max="10" step="1" class="form-control" value=1>
+                                        <hr>
+                                        <label for="sd_sample_prompt"><i class="arrow right"></i>&nbsp;&nbsp;Insert your <b>Prompt Sample</b> here (Zero Shot Approach):</label>
+                                            <textarea class="form-control" id="sd_sample_prompt" rows="3" placeholder="(Required) Input your prompt to be used as a sample to generate similar prompts.">Create an addition function in python for two numbers. Return explicitly the function. No  additional text.</textarea>
+                                        
+                                        <label for="solution_needed"><i class="arrow right"></i>&nbsp;&nbsp; Prompt must is a Question - Pair solution?</label>
+                                            <input id='solution_needed' type='checkbox' name='solution_flag' class="form-control">
+                                        
+                                    </fieldset>
+                                </div>
+                                <div class="column">
+                                    <fieldset style="border:2px solid lightblue; padding:15px;">
+                                        <legend>Judge Model & Generation Params</legend>
+                                        
+                                        <label for="jdg_llm_generator"><i class="arrow right"></i>&nbsp;&nbsp; Model Selection</label>
+                                            <select class="form-select" id='jdg_llm_generator'>
+                                                <option value="gpt-4o-mini" selected>OpenAI GPT-4o Mini</option>
+                                                <option value="claude-3-5-sonnet-20241022">Anthropic Sonnet 3.5</option>
+                                                <option value="meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo">Meta Llama 3.2</option>
+                                                <option value="gemini-1.5-pro">Google Gemini 1.5 Pro</option>
+                                            </select>
+                                        <hr>
+                                        <label for="jdg_prompt"><i class="arrow right"></i>&nbsp;&nbsp;Insert your <b>Judges Prompt</b> here:</label>
+                                            <textarea class="form-control" id="jdg_prompt" rows="3" placeholder="Judge LLM Model instructions"> clarity, descriptive, scalability, error handling </textarea>
+                                        <hr>    
+                                        <label for="jdg_threshold"><i class="arrow right"></i>&nbsp;&nbsp; Judge RAT (Response Acceptace Threshold, Scale: 1 lowest - 5 Best)</label>
+                                            <input id='jdg_threshold' type='number' min="0" max="5" step="0.1" class="form-control" value=5>
+                                        
+                                    </fieldset>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <input style="width:60%; padding:15px;" class="btn btn-success" type="submit" value="Generate">
+                            </div>
+                            
+                            <div>
+                                <hr>
+                                <div id="sd_loader" style="display: none;">
+                                    <img src="images/gears.gif" alt="Loading...">
+                                </div>
+                                <div id="download-link" style="display: none;">
+                                    <h4>Newly Generated Dataset!</h4>
+                                    <a class='no_change' href="#" id="download-file" download="">
+                                        <img src="images/json.png" alt="JSON Icon" style="width: 20px; height: 20px;">
+                                        <span id="filename">Filename</span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <hr>
+                                <?php
+                                $dir = "saved_datasets/";
+                                $ddir = "https://lps.dev-maister.gr/demo/ai/saved_datasets/";
+                                if (is_dir($dir)) {
+                                    if ($dh = opendir($dir)) {
+                                        while (($file = readdir($dh)) !== false) {
+                                            $ext = pathinfo($file, PATHINFO_EXTENSION);
+                                            if($ext=="json"){
+                                                $url_download = $dir."".basename($file, ".json").PHP_EOL;
+                                                
+                                                ?>
+                                                    <div id="download-link">
+                                                            <img src="images/json.png" alt="JSON Icon" style="width: 20px; height: 20px;">
+                                                            <span id="filename"><?php echo $file; ?></span>
+                                                    </div>
+                                                <?php
+                                            }
+                                        }
+                                        closedir($dh);
+                                    }
+                                }
+                                ?>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
+    <input id='openaiapikey_copy' type='hidden' class="form-control">
+    <input id='aimlapikey_copy' type='hidden' class="form-control">
+    <input id='anthropicapikey_copy' type='hidden' class="form-control">
+    
+    </form> 
     
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
@@ -673,6 +783,59 @@ $(document).ready(function() {
                 console.log("called:" + element);
                 });
     });
+	$('#sd_gen').on('submit', function(event) {
+        
+        event.preventDefault(); 
+        $('#sd_loader').show();
+        
+        copyValues();
+        var api_openai = $('#openaiapikey_copy').val();
+        var api_anthropic = $('#anthropicapikey_copy').val();
+        var api_aiml = $('#aimlapikey_copy').val();
+        
+        var llm_generator = $('#sd_llm_generator').val();
+        var total_prompts = $('#sd_samples_number').val();
+        var sample_prompt = $('#sd_sample_prompt').val();
+        
+        var llm_jdg = $('#jdg_llm_generator').val();
+        var guidelines = $('#jdg_prompt').val();
+        var threshold = $('#jdg_threshold').val();
+        
+        $.ajax({
+            url: 'generate_dataset.php',
+            type: 'POST',
+            data: {
+                    api_openai: api_openai,
+                    api_anthropic: api_anthropic,
+                    api_aiml: api_aiml,
+                    llm_generator: llm_generator,
+                    total_prompts: total_prompts,
+                    sample_prompt: sample_prompt,
+                    llm_jdg: llm_jdg,
+                    guidelines: guidelines,
+                    threshold: threshold
+            },
+            success: function(response) {
+                // Hide the loader
+                $('#sd_loader').hide();
+
+                // Parse the response
+                var data = JSON.parse(response);
+
+                // Display the filename and download link
+                $('#filename').text(data.filename);
+                $('#download-file').attr('download', data.filepath);
+                $('#download-file').attr('href', data.filepath);
+                $('#download-link').show();
+                
+            },
+            error: function() {
+                // Hide the loader
+                $('#loader').hide();
+                alert('An error occurred while processing your request.');
+            }
+        });
+    });
     
 });
     
@@ -693,6 +856,12 @@ function openTab(evt, tabName) {
       document.getElementById(tabName).style.display = "block";
       evt.currentTarget.className += " active";
     }
+
+function copyValues() {
+  document.getElementById('openaiapikey_copy').value = document.getElementById('openaiapikey').value;
+  document.getElementById('aimlapikey_copy').value = document.getElementById('aimlapikey').value;
+  document.getElementById('anthropicapikey_copy').value = document.getElementById('anthropicapikey').value;
+}
 
 $(window).on('load', function() {
     $('#myModal').modal('show');
