@@ -1,4 +1,4 @@
-# Beyond the Benchmark: A Customizable Platform for Re-al-Time, Preference-Driven LLM Evaluation
+# Beyond the Benchmark: A Customizable Platform for Real-Time, Preference-Driven LLM Evaluation
 
 ## Web App Setup and Usage Guide
 
