@@ -46,6 +46,9 @@ root/
         ├── llm_api_v7_distilled.php        # Handles communication with selected LLMs
         ├── llm_judge_api_v1_distilled.php  # Processes evaluation via Judge LLM
     └── saved_datasets/
+    └── images/
+        ├── gears.gif
+        ├── json.png  
 ```
 
 ### Technologies Required
