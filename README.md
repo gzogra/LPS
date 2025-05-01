@@ -27,6 +27,24 @@ This demo includes all core features and is pre-configured for immediate use wit
 
 The app runs on **Apache and PHP**, and a convenient way to set it up locally is by using **XAMPP**, a free software package that includes Apache, PHP, and MySQL.
 
+### 📁 Project Directory Structure
+
+Below is the structure of the web application, along with brief descriptions of each file:
+```
+root/
+├── index.php                   # Main entry point of the application (UI and controller)
+├── style.css                   # CSS styling for the interface
+├── authenticate.php            # Handles user login and API key verification
+├── logout.php                  # Ends user sessions securely
+├── ai.gif                      # Animated graphic used in the UI
+├── favicon.ico                 # Icon displayed in the browser tab
+└── main/
+    └── ai/
+        ├── api_1_v11_distilled.php         # General API utility functions
+        ├── llm_api_v7_distilled.php        # Handles communication with selected LLMs
+        ├── llm_judge_api_v1_distilled.php  # Processes evaluation via Judge LLM
+```
+
 ### Technologies Required
 
 - **XAMPP (Apache + PHP)**
