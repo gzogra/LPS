@@ -188,9 +188,9 @@ Each accepted entry in the JSON file will be structured as:
 
 ```json
 {
-  "prompt": "Generated prompt here",
-  "answer": "Answer to the prompt",
-  "score": 0.92
+  "query": "Generated prompt here",
+  "solution": "Answer to the prompt",
+  "judge_evaluation": "9"
 }
 ```
 
